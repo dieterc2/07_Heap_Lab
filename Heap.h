@@ -50,17 +50,28 @@ private:
 
 template<class Pri, class T>
 Heap<Pri,T>::Heap(){
-  //TODO
+	numItems = 0;
+	arrSize = START_SIZE;
+	backingArray = new std::pair<Pri, T>[arrSize];
 }
 
 template<class Pri, class T>
 Heap<Pri,T>::~Heap(){
-  //TODO
+	delete[] backingArray;
 }
 
 template<class Pri, class T>
 void Heap<Pri,T>::grow(){
-  //TODO
+	arrSize = 2 * arrSize;
+	std::pair<Pri, T>* u = new std::pair<Pri, T>[arrSize];
+
+	for(int i = 0; i < numItems; i++){
+		u[i] = backingArray[i];
+	}
+
+	delete[] backingArray;
+	backingArray = u;
+
 }
 
 template<class Pri, class T>
