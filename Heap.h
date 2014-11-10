@@ -76,12 +76,23 @@ void Heap<Pri,T>::grow(){
 
 template<class Pri, class T>
 void Heap<Pri,T>::add(std::pair<Pri,T> toAdd){
-  //TODO
+	if(numItems + 1 > arrSize)
+		grow();
+	numItems++;
+	backingArray[numItems] = toAdd;
+	bubbleUp(numItems);
 }
 
 template<class Pri, class T>
 void Heap<Pri,T>::bubbleUp(unsigned long index){
-  //TODO
+	int parent = (index - 1)/2;
+	std::pair<Pri, T> temp;
+	if(index > 0 && backingArray[index] < backingArray[parent]){
+		temp = backingArray[parent];
+		backingArray[parent] = backingArray[index];
+		backingArray[index] = temp;
+		bubbleUp(parent);
+	}
 }
 
 template<class Pri, class T>
@@ -98,7 +109,6 @@ std::pair<Pri,T> Heap<Pri,T>::remove(){
 
 template<class Pri, class T>
 unsigned long Heap<Pri,T>::getNumItems(){
-  //TODO
-  return 0;
+	return numItems;
 }
 
