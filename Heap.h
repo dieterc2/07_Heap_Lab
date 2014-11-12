@@ -46,6 +46,12 @@ private:
   void trickleDown(unsigned long index);  
 };
 
+/**
+* Authored By: Chris Dieter with template from Dr. Brinkman.
+* Help for the trickledown and remove functions were garnered 
+* from the textbook, Open Data Structures.
+* 11/11/2014
+*/
 #include <string>
 
 template<class Pri, class T>
@@ -78,76 +84,60 @@ template<class Pri, class T>
 void Heap<Pri,T>::add(std::pair<Pri,T> toAdd){
 	if(numItems + 1 > arrSize)
 		grow();
-	numItems++;
 	backingArray[numItems] = toAdd;
 	bubbleUp(numItems);
+	numItems++;
 }
 
 template<class Pri, class T>
 void Heap<Pri,T>::bubbleUp(unsigned long index){
-	int parent = (index - 1)/2;
+	unsigned long int parent = (index - 1)/2;
+
 	std::pair<Pri, T> temp;
-	if(index > 0 && backingArray[index] < backingArray[parent]){
-		temp = backingArray[parent];
-		backingArray[parent] = backingArray[index];
-		backingArray[index] = temp;
+	if(index > 0 && backingArray[index].first < backingArray[parent].first){
+		backingArray[parent].swap(backingArray[index]);
 		bubbleUp(parent);
 	}
 }
 
 template<class Pri, class T>
 void Heap<Pri,T>::trickleDown(unsigned long index){
-	std::pair<Pri, T> temp;
+	
+	bool check;
 	do{
-		int j = -1;
-		int rChild = (2 * index) + 2;
-		if(rChild < numItems && backingArray[index] > backingArray[rChild]){
-			int lChild = (2 * index) + 1;
-			if(backingArray[lChild] > backingArray[rChild]){
-				j = lChild;
+		check = false;
+		unsigned long int rChild = (2 * index) + 2;
+		unsigned long int lChild = (2 * index) + 1;
+
+		if(rChild < numItems && backingArray[index].first > backingArray[rChild].first){
+			if(backingArray[lChild].first < backingArray[rChild].first){
+				swap(backingArray[index], backingArray[lChild]);
+				index = lChild;
+				check = true;
 			} else{
-				j = rChild;
+				swap(backingArray[index], backingArray[rChild]);
+				index = rChild;
+				check = true;
 			}
 		} else{
-			int lChild = (2 * index) + 1;
-			if(lChild < numItems && backingArray[index] > backingArray[lChild]){
-				j = lChild;
+			if(lChild < numItems && backingArray[index].first > backingArray[lChild].first){
+				swap(backingArray[index], backingArray[lChild]);
+				index = lChild;
+				check = true;
+			} 
+			// Final case where one cannot trickle down anymore. Do not forget or infinite loop results
+			else{
+				check = true;
 			}
 		}
-		if(j >= 0){
-			temp = backingArray[index];
-			backingArray[index] = backingArray[j];
-			backingArray[j] = temp;
-		}
-		index = j;
-	}while(index >= 0);
-
-	
-	/*int rChild = (2 * index) + 2;
-	int lChild = (2 * index) + 1;
-	std::pair<Pri, T> temp;
-
-	// Check if value is larger than its right child
-	if(rChild < numItems && backingArray[index] > backingArray[rChild]){
-		temp = backingArray[index];
-		backingArray[index] = backingArray[rChild];
-		backingArray[rChild] = temp;
-		trickleDown(rChild);
-	} 
-	// Check if value is larger than its left child
-	else{
-		temp = backingArray[index];
-		backingArray[index] = backingArray[lChild];
-		backingArray[lChild] = temp;
-		trickleDown(lChild);
-	}*/
+	}while(check == false);
 }
 
 template<class Pri, class T>
 std::pair<Pri,T> Heap<Pri,T>::remove(){
-	if(numItems < 1)
+	if(numItems < 1){
 		throw std::string("No items to remove!");
-	
+	}
 	std::pair<Pri, T> retVal = backingArray[0];
 	backingArray[0] = backingArray[--numItems];
 	trickleDown(0);
