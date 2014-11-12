@@ -18,8 +18,10 @@ Questions
 
 #### 1. Which of the above requirements work, and which do not? For each requirement, write a brief response.
 
-1. TODO
-2. TODO
+1. Add and remove both function in 0(log n) time, as they eliminate one half of the results in each search for a value, going down or up the line to insert or remove 
+	the intended target.
+2. Memory is not leaked as the only place that allocates memory is the constructor and the grow function, and both of those are either handled by the deconstructor or
+	within the function (grow deletes the array it allocated).
 
 #### 2. Exercises 10.1 and 10.2 from http://opendatastructures.org/ods-cpp/10_3_Discussion_Exercises.html
 10.1 Adding seven to the heap would first place it as the left child of 16, and then would have it bubble up until it would be the right child of six. For three, it would start out
@@ -28,7 +30,7 @@ Questions
 	switched with 55 again and trickle down to be the left child of 16.
 
 #### 3. Exercise 10.4 from http://opendatastructures.org/ods-cpp/10_3_Discussion_Exercises.html
-10.4	
+10.4	Any child would be (d * i) + (Child # starting from 1). For the parent, I think it would be (i - (d-1))/d.
 #### 4. What is one question that confused you about this exercise, or one piece of advice you would share with students next semester?
 
 Make sure the logic within the bubble up and trickledown fucntions are sound as they are the main work-doers of the program and the data structure will be incorrect without it.
